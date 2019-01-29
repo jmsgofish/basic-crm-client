@@ -10,7 +10,7 @@ import App from 'App';
 import 'babel-polyfill';
 
 const httpLink = createHttpLink({
-  uri: 'http://localhost:3000/graphql'
+  uri: 'http://ec2-13-57-27-190.us-west-1.compute.amazonaws.com:3000/graphql'
 });
 
 const client = new ApolloClient({

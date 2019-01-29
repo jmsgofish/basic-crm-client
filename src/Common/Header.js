@@ -4,6 +4,8 @@ import { Link, NavLink, IndexLink } from 'react-router-dom';
 const Header = () => {
   return (
     <nav className="card blue-grey darken-1">
+      <NavLink to="/" activeClassName="active">Home</NavLink>
+      {" | "}
       <NavLink to="/contact" activeClassName="active">Contacts</NavLink>
       {" | "}
       <NavLink to="/case" activeClassName="active">Cases</NavLink>
