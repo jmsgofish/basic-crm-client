@@ -1,7 +1,11 @@
+/*
+This component does too much and is confusing. TODO: refactor
+*/
 import React, { Component } from 'react'
 import { Query } from 'react-apollo'
-import Queries from './../Utils/Queries'
-import ContactItem from './ContactItem'
+import Queries from 'Utils/Queries'
+import Mutations from 'Utils/Mutations'
+import ContactItem from 'Components/ContactItem'
 import Dropdown from 'react-dropdown'
 import styled from 'styled-components';
 import 'react-dropdown/style.css'
@@ -36,12 +40,12 @@ class CaseDetails extends Component {
 
           if (loading) return null;
           if (error) return 'Error!: ${error}';
-          let contactData = data;
+          let caseData = data;
           let caseid = id;
 
           let contactid = this.state.selectedId;
 
-          const contacts = contactData.case.contacts;
+          const contacts = caseData.case.contacts;
           const defaultOption = options[0];
 
           return (
@@ -52,8 +56,6 @@ class CaseDetails extends Component {
                 if (cerror) return <div>Error</div>
 
                 if (data && data.allContacts) {
-                  console.log(data.allContacts);
-
                   options = [];
                   data.allContacts.forEach(function (contact) {
                     options.push(contact.id + ': ' + contact.firstname + ' ' + contact.lastname);
@@ -62,14 +64,24 @@ class CaseDetails extends Component {
 
                 return (
                   <div>
-                    <div>{contactData.case.title} {contactData.case.description} {contactData.case.value} {contactData.case.courtdate}</div>
-                    <div>{contacts.map(c => <ContactItem key={c.id} contact={c} showRemove={true} onRemove={refetch} />)}</div>
                     <div>
-                      <Dropdown options={options} onChange={this.onSelect} value={this.state.selectedValue} placeholder="Select an option" />
-                      <Mutation mutation={Queries.ASSIGN_CONTACT} variables={{ contactid, caseid }}>
-                        {postMutation => <button onClick={() => {
+                      <h3>Case: {caseData.case.title}</h3>
+                      <h6>Description: {caseData.case.description}</h6>
+                      <h6>Value: ${caseData.case.value}</h6>
+                      <h6>Court Date: {new Date(caseData.case.courtdate).toDateString()}</h6>
+                    </div>
+                    <hr style={{ marginTop: '30px', marginBottom: '30px' }} />
+                    <ul className="collection with-header" style={{ maxWidth: '400px' }}>
+                      <li className="collection-header"><h5>Associated Contacts</h5></li>
+                      {contacts.map(c => <ContactItem key={c.id} contact={c} onRemove={refetch} />)}
+                    </ul>
+                    <div>
+                      <h6>Associate new Contact</h6>
+                      <div style={{ float: 'left' }}><Dropdown options={options} onChange={this.onSelect} value={this.state.selectedValue} placeholder="Select an option" /></div>
+                      <Mutation mutation={Mutations.ASSIGN_CONTACT} variables={{ contactid, caseid }}>
+                        {postMutation => <a className="waves-effect waves-light btn" onClick={() => {
                           postMutation().then(() => { refetch() }, error => { console.log(error); alert('Duplicate Case Role'); });
-                        }}>Associate</button>}
+                        }}>Associate</a>}
                       </Mutation>
                     </div>
                   </div>

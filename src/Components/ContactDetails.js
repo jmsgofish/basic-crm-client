@@ -1,6 +1,7 @@
 import React, { Component } from 'react'
 import { Query } from 'react-apollo'
-import Queries from './../Utils/Queries'
+import Queries from 'Utils/Queries'
+import { Link } from 'react-router-dom';
 
 class ContactDetails extends Component {
   render() {
@@ -12,9 +13,19 @@ class ContactDetails extends Component {
           if (loading) return null;
           if (error) return `Error!: ${error}`;
 
+          let caseData = '';
+          if (data.contact.case) {
+            caseData = <Link to={'/case/' + data.contact.case.id}>{data.contact.case.title}</Link>;
+          }
+
           return (
             <div>
-              <div>{data.contact.firstname} {data.contact.lastname} {data.contact.email} {data.contact.caserole}</div>
+              <div>
+                <h4>{data.contact.firstname} {data.contact.lastname}</h4>
+                <h6>Email: {data.contact.email}</h6>
+                <h6>Case Role: {data.contact.caserole}</h6>
+                <h6>Case: {caseData}</h6>
+              </div>
             </div>
           );
         }}

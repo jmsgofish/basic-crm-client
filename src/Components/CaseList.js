@@ -1,7 +1,7 @@
 import React, { Component } from 'react'
-import CaseItem from './CaseItem'
+import CaseItem from 'Components/CaseItem'
 import { Query } from 'react-apollo'
-import Queries from './../Utils/Queries'
+import Queries from 'Utils/Queries'
 import { Link } from 'react-router-dom';
 
 class CaseList extends Component {
@@ -9,6 +9,11 @@ class CaseList extends Component {
     return (
       <div>
         <div>
+          <Link className="waves-effect waves-light btn" to='/casecreate'>Create Case</Link>
+          <Link className="waves-effect waves-light btn" to='/casecreate/1'>Create Case with Contact</Link>
+        </div>
+        <h4>Cases</h4>
+        <div className="row">
           <Query query={Queries.CASE_QUERY} fetchPolicy={'network-only'}>
             {({ loading, error, data }) => {
               if (loading) return <div>Fetching</div>
@@ -23,12 +28,6 @@ class CaseList extends Component {
               )
             }}
           </Query>
-        </div>
-        <div>
-          <Link to='/casecreate'>Create Case</Link>
-        </div>
-        <div>
-          <Link to='/casecreate/1'>Create Case with Contact</Link>
         </div>
       </div>
     )

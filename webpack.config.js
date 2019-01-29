@@ -1,3 +1,5 @@
+const path = require('path');
+
 module.exports = {
   module: {
     rules: [
@@ -17,7 +19,9 @@ module.exports = {
   resolve: {
       extensions: ['.js', '.jsx', '.css'],
       modules: [
-        'node_modules'
+        'node_modules',
+        path.resolve('./src'),
+        path.resolve('./node_modules')
       ]
   }
 };

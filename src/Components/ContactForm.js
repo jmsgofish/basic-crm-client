@@ -1,8 +1,9 @@
 import React, { Component } from 'react'
+import PropTypes from 'prop-types'
 import Dropdown from 'react-dropdown'
-import styled from 'styled-components';
+import styled from 'styled-components'
 import 'react-dropdown/style.css'
-import Queries from './../Utils/Queries'
+import Queries from 'Utils/Queries'
 import { Query } from 'react-apollo'
 
 class ContactForm extends Component {
@@ -31,7 +32,6 @@ class ContactForm extends Component {
           if (loading) return <div>Fetching</div>
           if (error) return <div>Error</div>
 
-          console.log(data);
           let options = [];
           data.allCases.forEach(function (c) {
             options.push(c.id + ': ' + c.title);
@@ -39,15 +39,15 @@ class ContactForm extends Component {
 
           let casefield = '';
           if (this.props.includeCase) {
-            casefield = <Dropdown options={options} onChange={this.onSelect} value={this.state.selectedValue} placeholder="Select an case" />
+            casefield = <div><span>Case: </span><Dropdown options={options} onChange={this.onSelect} value={this.state.selectedValue} placeholder="Select an case" /></div>
           }
 
           return (
             <div>
-                <input value={this.props.firstname} onChange={e => this.props.updateValue({ firstname: e.target.value })} type="text" placeholder="A first name for the contact" />
-                <input value={this.props.lastname}  onChange={e => this.props.updateValue({ lastname: e.target.value })}  type="text" placeholder="A last name for the contact" />
-                <input value={this.props.email}     onChange={e => this.props.updateValue({ email: e.target.value })}     type="text" placeholder="The email for the contact" />
-                <input value={this.props.caserole}  onChange={e => this.props.updateValue({ caserole: e.target.value })}  type="text" placeholder="The case role for the contact" />
+                <span>First Name: </span><input value={this.props.firstname} onChange={e => this.props.updateValue({ firstname: e.target.value })} type="text" placeholder="A first name for the contact" />
+                <span>Last Name: </span><input value={this.props.lastname}  onChange={e => this.props.updateValue({ lastname: e.target.value })}  type="text" placeholder="A last name for the contact" />
+                <span>Email: </span><input value={this.props.email}     onChange={e => this.props.updateValue({ email: e.target.value })}     type="text" placeholder="The email for the contact" />
+                <span>Case Role: </span><input value={this.props.caserole}  onChange={e => this.props.updateValue({ caserole: e.target.value })}  type="text" placeholder="The case role for the contact" />
                 {casefield}
             </div>
           );
@@ -55,6 +55,15 @@ class ContactForm extends Component {
       </Query>
     )
   }
+}
+
+ContactForm.propTypes = {
+  firstname     : PropTypes.string.isRequired,
+  lastname      : PropTypes.string.isRequired,
+  email         : PropTypes.string.isRequired,
+  caserole      : PropTypes.string.isRequired,
+  includeCase   : PropTypes.bool,
+  updateValue   : PropTypes.func.isRequired
 }
 
 export default ContactForm
